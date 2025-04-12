@@ -1,22 +1,26 @@
-import React, { useState } from 'react';
-import { Button, Text, View } from 'react-native';
 
-const Cat = (props: { name: string }) => {
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
+
+const Cat = ({ name }: { name: string }) => {
   const [isHungry, setIsHungry] = useState(true);
 
   return (
-    <View style={{ marginBottom: 10 }}>
-      <Text>
-        I am {props.name}, and I am {isHungry ? "hungry" : "full"}!
+    <View>
+      <Text >
+        I am {name}, and I am {isHungry ? 'hungry' : 'full'}!
       </Text>
       <Button
-        onPress={() => {
-          setIsHungry(false);
-        }}
+        title={isHungry ? 'Pour me some milk, please!' : 'Thank you!'}
+        onPress={() => setIsHungry(false)}
         disabled={!isHungry}
-        title={
-          isHungry ? "Pour me some milk, please!" : "Thank you!"
-        }
       />
     </View>
   );
@@ -24,11 +28,19 @@ const Cat = (props: { name: string }) => {
 
 const Cafe = () => {
   return (
-    <>
-      <Cat name="Munkustrap" />
-      <Cat name="Spot" />
-    </>
+    <SafeAreaView>
+      <ScrollView>
+        <Cat name="Mimi" />
+        <Cat name="Tom" />
+        <Cat name="Luna" />
+        <Cat name="Leo" />
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 export default Cafe;
+
+const styles = StyleSheet.create({
+ 
+});
