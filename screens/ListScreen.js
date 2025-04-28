@@ -2,12 +2,13 @@ import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 
 const lyThuyetComponents = [
-
   { name: 'Pokemon', componentName: 'Pokemon' },
   { name: 'Cafe', componentName: 'Cafe' },
   { name: 'Design', componentName: 'Design' },
   { name: 'CreateAcc', componentName: 'CreateAcc' },
   { name: 'ForgotAcc', componentName: 'ForgotAcc' },
+  { name: 'HomeScreen', componentName: 'HomeScreen' },
+  { name: 'MyDrawer', componentName: 'MyDrawer' },
 ];
 
 const thucHanhComponents = [
@@ -15,10 +16,11 @@ const thucHanhComponents = [
   { name: 'Project2', componentName: 'Project2' },
   { name: 'Project3', componentName: 'Project3' },
   { name: 'Project4', componentName: 'Project4' },
-  { name: 'Project5', componentName: 'Project5'},
-  { name: 'Project6', componentName: 'Project6'},
+  { name: 'Project5', componentName: 'Project5' },
+  { name: 'Project6', componentName: 'Project6' },
   { name: 'Project7', componentName: 'Project7' },
   { name: 'Project8', componentName: 'Project8' },
+  { name: 'LAB1_2', componentName: 'LAB1_2' },
 ];
 
 export default function ListScreen({ navigation, route }) {
