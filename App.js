@@ -12,6 +12,11 @@ import HomeScreen from './Exercise4/HomeScreen';
 import Profile from './Exercise4/Profile';
 import CustomDrawerBar from './Exercise4/CustomDrawerBar';
 
+// Import màn hình từ thư mục android/excersise3
+import Design from './android/excersise3/Design';
+import CreateAcc from './android/excersise3/CreateAcc';
+import ForgotAcc from './android/excersise3/ForgotAcc';
+
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -22,7 +27,7 @@ const TheoryDrawer = () => (
     <Drawer.Screen name="TheoryDetail" component={Ex4_DetailScreen} />
     <Drawer.Screen name="Pokemon" component={HomeScreen} /> 
     <Drawer.Screen name="Cafe" component={HomeScreen} />
-    <Drawer.Screen name="Design" component={HomeScreen} />
+    <Drawer.Screen name="Design" component={Design} />  
   </Drawer.Navigator>
 );
 
@@ -45,6 +50,11 @@ export default function App() {
           <Stack.Screen name="List" component={ListScreen} />
           <Stack.Screen name="Detail" component={DetailsScreen} />
           <Stack.Screen name="Ex4_DetailScreen" component={Ex4_DetailScreen} />
+          
+          {/* Thêm các màn hình Design, CreateAcc, ForgotAcc vào Stack */}
+          <Stack.Screen name="Design" component={Design} />
+          <Stack.Screen name="CreateAcc" component={CreateAcc} />
+          <Stack.Screen name="ForgotAcc" component={ForgotAcc} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

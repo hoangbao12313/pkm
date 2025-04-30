@@ -20,6 +20,7 @@ import CustomNavigationBar from '../Exercise4/CustomNavigationBar';
 import Ex4_DetailScreen from '../Exercise4/Ex4_DetailScreen';
 import MyDrawer from '../Exercise4/MyDrawer';
 import Profile from '../Exercise4/Profile';
+import BottomTabNavigator from '../Exercise4/BottomTabNavigator';
 
 export default function DetailScreen({ route, navigation }) {
   const componentName = route?.params?.componentName;
@@ -45,12 +46,18 @@ export default function DetailScreen({ route, navigation }) {
     HomeScreen: HomeScreen,
     MyDrawer: MyDrawer,
     Profile: Profile,
+    BottomNavigation: BottomTabNavigator, 
+    BottomTabNavigator: BottomTabNavigator,
   };
 
   const SelectedComponent = componentsMap[componentName];
 
   if (!SelectedComponent) {
-    return <Text>Component not found: {componentName}</Text>;
+    return (
+      <View style={styles.container}>
+        <Text>Component not found: {componentName}</Text>
+      </View>
+    );
   }
 
   return <SelectedComponent navigation={navigation} />;

@@ -14,7 +14,7 @@ const Drawer = createDrawerNavigator()
             >
                 <Drawer.Screen name ="Home" component={HomeScreen}/>
                 <Drawer.Screen name ="Profile" component={Profile}/>
-                <Drawer.Screen name ="Detail" component={Ex4_DetailScreen}/>
+                <Drawer.Screen name ="Ex4_DetailScreen" component={Ex4_DetailScreen}/>
             </Drawer.Navigator>
         )
     }

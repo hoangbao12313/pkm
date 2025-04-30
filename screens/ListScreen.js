@@ -9,6 +9,7 @@ const lyThuyetComponents = [
   { name: 'ForgotAcc', componentName: 'ForgotAcc' },
   { name: 'HomeScreen', componentName: 'HomeScreen' },
   { name: 'MyDrawer', componentName: 'MyDrawer' },
+  {name : 'BottomTabNavigator', componentName: 'BottomTabNavigator'},
 ];
 
 const thucHanhComponents = [
