@@ -21,6 +21,7 @@ import Ex4_DetailScreen from '../Exercise4/Ex4_DetailScreen';
 import MyDrawer from '../Exercise4/MyDrawer';
 import Profile from '../Exercise4/Profile';
 import BottomTabNavigator from '../Exercise4/BottomTabNavigator';
+import Routes from '../LAB2/components/Routes';
 
 export default function DetailScreen({ route, navigation }) {
   const componentName = route?.params?.componentName;
@@ -48,6 +49,7 @@ export default function DetailScreen({ route, navigation }) {
     Profile: Profile,
     BottomNavigation: BottomTabNavigator, 
     BottomTabNavigator: BottomTabNavigator,
+    Routes: Routes,
   };
 
   const SelectedComponent = componentsMap[componentName];

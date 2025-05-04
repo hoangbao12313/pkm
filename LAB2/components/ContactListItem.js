@@ -10,7 +10,7 @@ const ContactListItem = ({
     return (
         <TouchableHighlight
         underlayColor={colors.grey}
-        style ={StyleSheet.container}
+        style ={styles.container}
         onPress={onPress}
         >
             <View style={styles.contactInfo}>
@@ -20,17 +20,17 @@ const ContactListItem = ({
                 />
               <View style={styles.details}>
                 <Text style={styles.title}> {name}</Text>
-                <Text style={styles.subTitle}> {phone}</Text>
+                <Text style={styles.subtitle}> {phone}</Text>
               </View>
             </View>
         </TouchableHighlight>
     )
 }
-ContactListItem.PropTypes ={
+ContactListItem.propTypes = {
   name: PropTypes.string,
   avatar: PropTypes.string,
   phone: PropTypes.string,
-  onPress: PropTypes.string,
+  onPress: PropTypes.func,
 }
 const styles = StyleSheet.create({
     container:{
@@ -62,11 +62,12 @@ const styles = StyleSheet.create({
       fontWeight:'bold',
       fontSize:16,
     },
-    subTitle:{
+    subtitle:{
       color:colors.blue,
       fontSize:15,
-      margintop:4,
+      marginTop: 4,
     },
+    
     
 })
 
