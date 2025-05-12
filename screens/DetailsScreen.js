@@ -2,9 +2,9 @@ import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import Pokemon from '../components/Pokemon';
 import Cafe from '../components/Cafe';
-import Design from '../android/excersise3/Design';
-import CreateAcc from '../android/excersise3/CreateAcc';
-import ForgotAcc from '../android/excersise3/ForgotAcc';
+import Design from '../android/Excersise3/Design';
+import CreateAcc from '../android/Excersise3/CreateAcc';
+import ForgotAcc from '../android/Excersise3/ForgotAcc';
 import Project1 from '../LAB1/Project1';
 import Project2 from '../LAB1/Project2';
 import Project3 from '../LAB1/Project3';
@@ -22,7 +22,8 @@ import MyDrawer from '../Exercise4/MyDrawer';
 import Profile from '../Exercise4/Profile';
 import BottomTabNavigator from '../Exercise4/BottomTabNavigator';
 import Routes from '../LAB2/components/Routes';
-
+import TodoScreen from '../android/Exercise5/TodoScreen';
+import Todo from '../android/Exercise5/Todo';
 export default function DetailScreen({ route, navigation }) {
   const componentName = route?.params?.componentName;
 
@@ -50,6 +51,8 @@ export default function DetailScreen({ route, navigation }) {
     BottomNavigation: BottomTabNavigator, 
     BottomTabNavigator: BottomTabNavigator,
     Routes: Routes,
+    TodoScreen: TodoScreen,
+    Todo: Todo,
   };
 
   const SelectedComponent = componentsMap[componentName];
@@ -57,7 +60,8 @@ export default function DetailScreen({ route, navigation }) {
   if (!SelectedComponent) {
     return (
       <View style={styles.container}>
-        <Text>Component not found: {componentName}</Text>
+        <Text>Component not found: {componentName || 'Unknown Component'}</Text>
+
       </View>
     );
   }

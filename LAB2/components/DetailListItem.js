@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import PropTypes from 'prop-types';
 import colors from '../utility/colors';
 
-const DetailListItem = ({ icon, title, subtitle }) => {
+const DetailListItem = ({ icon, title, subtitle, onPress }) => {
   return (
     <View style={styles.borderContainer}>
       <View style={styles.wrapper}>
@@ -13,17 +13,14 @@ const DetailListItem = ({ icon, title, subtitle }) => {
             <Icon
               name={icon}
               size={24}
-              style={{
-                color: colors.black,
-                marginRight: 20,
-              }}
+              style={styles.icon}
             />
           )}
+          <View style={styles.contentContainer}>
+            {title && <Text style={styles.title}>{title}</Text>}
+            {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+          </View>
         </View>
-      </View>
-      <View style={styles.contentContainer}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
     </View>
   );
@@ -33,6 +30,7 @@ DetailListItem.propTypes = {
   icon: PropTypes.string,
   title: PropTypes.string,
   subtitle: PropTypes.string,
+  onPress: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
@@ -67,6 +65,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   icon: {
+    color: colors.black,
     marginRight: 20,
   },
 });

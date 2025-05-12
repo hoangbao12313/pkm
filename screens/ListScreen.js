@@ -10,6 +10,7 @@ const lyThuyetComponents = [
   { name: 'HomeScreen', componentName: 'HomeScreen' },
   { name: 'MyDrawer', componentName: 'MyDrawer' },
   {name : 'BottomTabNavigator', componentName: 'BottomTabNavigator'},
+  {name: 'TodoScreen', componentName: 'TodoScreen'}, 
 ];
 
 const thucHanhComponents = [

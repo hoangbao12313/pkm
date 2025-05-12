@@ -1,7 +1,5 @@
 import { Alert, View } from "react-native";
 import { Appbar } from "react-native-paper";
-import App from "../../App";
-
 
 const DemoAppbar = ()=>{
     const goBack =() => Alert.alert("Go Back")

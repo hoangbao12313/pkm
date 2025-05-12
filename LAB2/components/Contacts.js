@@ -8,7 +8,11 @@ import { useDispatch, useSelector } from 'react-redux';
 const keyExtractor = ({ phone }) => phone;
 
 const Contacts = ({ navigation }) => {
-  const { contacts, loading, error } = useSelector(( state) => state);
+  const { contacts, loading, error } = useSelector((state) => ({
+    contacts: state.contacts,
+    loading: state.loading,
+    error: state.error,
+  }));
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -17,17 +21,15 @@ const Contacts = ({ navigation }) => {
       .then((contacts) => {
         dispatch(fetchContactsSuccess(contacts));
       })
-      .catch(
-        e =>{
-          dispatch(fetchContactsError());
-        }
-      )
+      .catch((e) => {
+        dispatch(fetchContactsError(e.message));
+      });
   }, []);
 
   const contactsSorted = contacts.slice().sort((a, b) => a.name.localeCompare(b.name));
 
   const renderContact = ({ item }) => {
-    const { name, avatar, phone } = item;
+    const { name = '', avatar = '', phone = '' } = item;
     return (
       <ContactListItem
         name={name}
@@ -41,8 +43,10 @@ const Contacts = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {loading && <ActivityIndicator color="blue" size="large" />}
-      {error && <Text>Error: {error}</Text>}
-      {!loading && !error && contacts.length === 0 && <Text>No contacts available.</Text>}
+      {error && <Text style={styles.errorText}>Error: {error}</Text>}
+      {!loading && !error && contacts.length === 0 && (
+        <Text style={styles.emptyText}>No contacts available.</Text>
+      )}
       {!loading && !error && contacts.length > 0 && (
         <FlatList
           data={contactsSorted}
@@ -59,6 +63,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     flex: 1,
+    padding: 16,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
+    textAlign: 'center',
+    marginVertical: 10,
+  },
+  emptyText: {
+    color: 'gray',
+    fontSize: 16,
+    textAlign: 'center',
+    marginVertical: 10,
   },
 });
 

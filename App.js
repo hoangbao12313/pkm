@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { PaperProvider } from 'react-native-paper';
 import { Provider } from 'react-redux';
-import Store from '../DemoReactNative/LAB2/components/Store'; // Đảm bảo sử dụng Store đúng tên
+import Store from '../DemoReactNative/LAB2/components/Store';
 
 import MainMenuScreen from './screens/MainMenuScreen';
 import ListScreen from './screens/ListScreen';
@@ -13,12 +13,17 @@ import Ex4_DetailScreen from './Exercise4/Ex4_DetailScreen';
 import HomeScreen from './Exercise4/HomeScreen';
 import Profile from './Exercise4/Profile';
 import CustomDrawerBar from './Exercise4/CustomDrawerBar';
+import Pokemon from './components/Pokemon';
+import Cafe from './components/Cafe';
 
-import Design from './android/excersise3/Design';
-import CreateAcc from './android/excersise3/CreateAcc';
-import ForgotAcc from './android/excersise3/ForgotAcc';
+import Design from '../DemoReactNative/android/Excersise3/Design';
+import CreateAcc from './android/Excersise3/CreateAcc';
+import ForgotAcc from './android/Excersise3/ForgotAcc';
 import Routes from '../DemoReactNative/LAB2/components/Routes';
 
+import firestore from '@react-native-firebase/firestore'; // Sửa import
+import TodoScreen from './android/Exercise5/TodoScreen';
+import Todo from './android/Exercise5/Todo';
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -41,13 +46,14 @@ const PracticeDrawer = () => (
   </Drawer.Navigator>
 );
 
-export default function App() {
+function App() {
   return (
-    <Provider store={Store}> {/* Đảm bảo Store được sử dụng đúng */}
+    <Provider store={Store}>
       <PaperProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="MainMenu">
             <Stack.Screen name="MainMenu" component={MainMenuScreen} options={{ title: 'Chọn chế độ' }} />
+            <Stack.Screen name="TodoApp" component={TodoScreen} />
             <Stack.Screen name="Theory" component={TheoryDrawer} />
             <Stack.Screen name="Practice" component={PracticeDrawer} />
             <Stack.Screen name="List" component={ListScreen} />
@@ -63,3 +69,4 @@ export default function App() {
     </Provider>
   );
 }
+export default App;

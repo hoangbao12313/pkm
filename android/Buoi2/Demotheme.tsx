@@ -16,6 +16,7 @@ const DemoTheme = ()=>{
                 <Text style={{...myStyle.text, color: myTheme.colors.onSecondary}}> 
                     primary
                 </Text>
+            
             </View>
             <View style={{...myStyle.box, backgroundColor: myTheme.colors.error}}>
                 <Text style={{...myStyle.text, color: myTheme.colors.onError}}> 

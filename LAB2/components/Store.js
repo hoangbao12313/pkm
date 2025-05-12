@@ -5,21 +5,21 @@ const contactsSlice = createSlice({
   initialState: {
     contacts: [],
     loading: false,
-    error: false,
+    error: null, // Chuyển sang null thay vì boolean
   },
   reducers: {
     fetchContactsLoading: (state) => {
       state.loading = true;
-      state.error = false;
+      state.error = null;
     },
     fetchContactsSuccess: (state, action) => {
       state.contacts = action.payload;
       state.loading = false;
-      state.error = false;
+      state.error = null;
     },
-    fetchContactsError: (state) => {
+    fetchContactsError: (state, action) => {
       state.loading = false;
-      state.error = true;
+      state.error = action.payload; // Lưu chuỗi lỗi
     },
   },
 });
