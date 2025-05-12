@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import Pokemon from '../components/Pokemon';
 import Cafe from '../components/Cafe';
-import Design from '../android/Excersise3/Design';
+import Design from '../android/Excersise3/Design'
 import CreateAcc from '../android/Excersise3/CreateAcc';
 import ForgotAcc from '../android/Excersise3/ForgotAcc';
 import Project1 from '../LAB1/Project1';
