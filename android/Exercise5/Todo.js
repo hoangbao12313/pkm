@@ -1,6 +1,6 @@
 import React from 'react';
 import { List } from 'react-native-paper';
-import firestore from '@react-native-firebase/firestore';
+// import firestore from '@react-native-firebase/firestore';
 import { TouchableOpacity } from 'react-native';
 
 function Todo({ id, title, complete }) {

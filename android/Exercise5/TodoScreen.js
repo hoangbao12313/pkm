@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, View, Text } from 'react-native';
 import { Appbar, TextInput, Button } from 'react-native-paper';
-import firestore from '@react-native-firebase/firestore';
+// import firestore from '@react-native-firebase/firestore';
 import Todo from './Todo';
 
 function TodoScreen() {
