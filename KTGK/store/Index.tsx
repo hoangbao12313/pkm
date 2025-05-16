@@ -1,6 +1,6 @@
-import { getApp } from "firebase/app";
-import { getFirestore, collection, doc, setDoc, onSnapshot } from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+// store/Index.tsx
+import firestore from '@react-native-firebase/firestore';
+import firebaseAuth from '@react-native-firebase/auth';
 import { Alert } from "react-native";
 import React, {
   createContext,
@@ -50,10 +50,9 @@ const MyContextControllerProvider = ({ children }: ProviderProps) => {
     userLogin: null,
     jobs: [],
   };
-
   const [controller, dispatch] = useReducer(reducer, initialState);
 
-  const value = useMemo(() => [controller, dispatch] as [State, Dispatch<Action>], [controller]);
+  const value = useMemo(() => [controller, dispatch] as [State, Dispatch<Action>], [controller, dispatch]);
 
   return (
     <MyContext.Provider value={value}>
@@ -62,49 +61,50 @@ const MyContextControllerProvider = ({ children }: ProviderProps) => {
   );
 };
 
-const useMyContextProvider = (): [State, Dispatch<Action>] => {
+const useMyContextProvider = () => {
   const context = useContext(MyContext);
   if (!context) {
-    throw new Error("useMyContextProvider phải đặt trong MyContextControllerProvider");
+    throw new Error("useMyContextProvider must be used within a MyContextControllerProvider");
   }
   return context;
 };
 
-// Modular Firebase API usage
-const app = getApp();
-const db = getFirestore(app);
-const auth = getAuth(app);
-const USERS = collection(db, "USERS");
+// Firebase Firestore & Auth Instances
+const USERS_COLLECTION = firestore().collection("USERS");
+const auth = firebaseAuth();
 
 // Tạo tài khoản mới
 const createAccount = async (email: string, password: string, fullName: string) => {
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
+    await auth.createUserWithEmailAndPassword(email, password);
     Alert.alert("Tạo tài khoản thành công với email: " + email);
-    // set tài liệu
-    await setDoc(doc(USERS, email), {
+
+    await USERS_COLLECTION.doc(email).set({
       email,
       password,
       fullName,
     });
   } catch (e: any) {
-    console.log(e.message);
+    console.log("Lỗi tạo tài khoản:", e.message);
   }
 };
 
 // Đăng nhập
 const login = async (dispatch: Dispatch<Action>, email: string, password: string) => {
   try {
-    await signInWithEmailAndPassword(auth, email, password);
-    const userDocRef = doc(USERS, email);
-    // Lắng nghe snapshot
-    onSnapshot(userDocRef, (u) => {
-      if (u.exists()) {
-        const data = u.data() as User;
-        console.log("Đăng nhập thành công với: " + u.id);
+    await auth.signInWithEmailAndPassword(email, password);
+
+    const userDocRef = USERS_COLLECTION.doc(email);
+
+    const unsubscribe = userDocRef.onSnapshot((docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data() as User;
+        console.log("Đăng nhập thành công với: " + email);
         dispatch({ type: "USER_LOGIN", value: data });
       }
     });
+
+    // Optionally: return unsubscribe if you want to cleanup later
   } catch (e) {
     Alert.alert("Sai email và mật khẩu");
   }
@@ -113,7 +113,7 @@ const login = async (dispatch: Dispatch<Action>, email: string, password: string
 // Đăng xuất
 const logout = async (dispatch: Dispatch<Action>) => {
   try {
-    await signOut(auth);
+    await auth.signOut();
     dispatch({ type: "LOGOUT" });
   } catch (e) {
     console.log("Lỗi đăng xuất:", e);
@@ -121,9 +121,9 @@ const logout = async (dispatch: Dispatch<Action>) => {
 };
 
 export {
-  MyContextControllerProvider,
-  useMyContextProvider,
   createAccount,
   login,
   logout,
+  MyContextControllerProvider,
+  useMyContextProvider
 };

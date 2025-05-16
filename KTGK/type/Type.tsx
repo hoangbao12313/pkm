@@ -1,9 +1,10 @@
 export type RootStackParamList = {
-  FoodList: {category: string};
+  FoodList: { category: string };
   Cart: undefined;
-  Cuisine: undefined;
+  Cuisine: { category: string };
   Login: undefined;
   Register: undefined;
-  ForgetPassword: undefined;
+  ForgotPassword: undefined;
   PaymentSuccess: undefined;
+  
 };

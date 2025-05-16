@@ -9,6 +9,7 @@ import {
 import { TextInput } from 'react-native-paper';
 import { RootStackParamList } from '../type/type';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import auth from '@react-native-firebase/auth';
 
 type LoginProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
@@ -18,7 +19,8 @@ const Login = ({ navigation }: LoginProps) => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 const [showPassword, setShowPassword] = useState(false);
-  const handleLogin = async () => {
+
+const handleLogin = async () => {
   let valid = true;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -41,10 +43,9 @@ const [showPassword, setShowPassword] = useState(false);
 
   if (valid) {
     try {
-
+      await auth().signInWithEmailAndPassword(email, password);
       Alert.alert('Đăng nhập thành công');
-navigation.replace('FoodList', { category: 'Chinese' });
-
+      navigation.replace('Cuisine', { category: 'Chinese' });
     } catch (error: any) {
       Alert.alert('Lỗi', error.message);
     }
@@ -80,7 +81,7 @@ navigation.replace('FoodList', { category: 'Chinese' });
       {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
       <TouchableOpacity
         style={styles.forgotBtn}
-        onPress={() => navigation.navigate('ForgetPassword')}
+        onPress={() => navigation.navigate('ForgotPassword')}
       >
         <Text style={styles.forgotBtnText}>Forgot Password?</Text>
       </TouchableOpacity>

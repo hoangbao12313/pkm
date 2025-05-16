@@ -9,7 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import { Snackbar } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 import firestore, { serverTimestamp } from '@react-native-firebase/firestore';
@@ -24,42 +24,28 @@ type FoodItem = {
   price: number;
   image: any;
 };
-
 const sampleFoods: FoodItem[] = [
-  {
-    id: '1',
-    name: 'Noodles',
-    type: 'chinese',
-    price: 100,
-    image: require('../images/south-indian.png'),
-  },
-    {
-    id: '2',
-    name: 'Pizza',
-    type: 'chinese',
-    price: 100,
-    image: require('../images/pizza.png'),
-  },
-    {
-    id: '3',
-    name: 'Ice Cream',
-    type: 'chinese',
-    price: 100,
-    image: require('../images/ice-creams.png'),
-  },
+  { id: '1', name: 'Noodles', type: 'Chinese', price: 100, image: require('../images/south-indian.png') },
+  { id: '2', name: 'Pizza', type: 'Chinese', price: 100, image: require('../images/pizza.png') },
+  { id: '3', name: 'Dosa', type: 'South Indian', price: 80, image: require('../images/south-indian.png') },
+  { id: '4', name: 'Lassi', type: 'Beverages', price: 50, image: require('../images/beverages.png') },
+  { id: '5', name: 'Butter Chicken', type: 'North Indian', price: 150, image: require('../images/north-indian.png') },
 ];
 
 const FoodList = () => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'FoodList'>>();
+  const route = useRoute<RouteProp<RootStackParamList, 'FoodList'>>();
+  const category = route.params.category; // Nhận category từ route
+
   const [cart, setCart] = useState<string[]>([]);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'FoodList'>>();
   const db = getFirestore();
 
   const addToCart = async (item: FoodItem) => {
     try {
-      await addDoc(collection(db, 'FoodApp'), {
+      await addDoc(collection(db, 'Cart'), {
         id: item.id,
         name: item.name,
         type: item.type,
@@ -78,12 +64,10 @@ const FoodList = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      title: category, // Đặt tiêu đề động theo category
       headerRight: () => (
         <View style={{ flexDirection: 'row', marginRight: 16 }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Cart')}
-            style={{ marginRight: 20 }}
-          >
+          <TouchableOpacity onPress={() => navigation.navigate('Cart')} style={{ marginRight: 20 }}>
             <Icon name="cart-outline" size={24} color="#000" />
           </TouchableOpacity>
 
@@ -96,9 +80,7 @@ const FoodList = () => {
                   { text: 'Hủy', style: 'cancel' },
                   {
                     text: 'Đồng ý',
-                    onPress: () => {
-                        navigation.navigate('Login');
-                    },
+                    onPress: () => navigation.navigate('Login'),
                     style: 'destructive',
                   },
                 ]
@@ -110,7 +92,10 @@ const FoodList = () => {
         </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, category]);
+
+  // Lọc món ăn theo loại đã chọn
+  const filteredFoods = sampleFoods.filter(food => food.type.toLowerCase() === category.toLowerCase());
 
   const renderItem = ({ item }: { item: FoodItem }) => (
     <View style={styles.card}>
@@ -127,7 +112,7 @@ const FoodList = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={sampleFoods}
+        data={filteredFoods}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
@@ -136,10 +121,7 @@ const FoodList = () => {
         visible={snackbarVisible}
         onDismiss={() => setSnackbarVisible(false)}
         duration={1500}
-        action={{
-          label: 'Đóng',
-          onPress: () => setSnackbarVisible(false),
-        }}
+        action={{ label: 'Đóng', onPress: () => setSnackbarVisible(false) }}
       >
         {snackbarMessage}
       </Snackbar>
@@ -148,6 +130,7 @@ const FoodList = () => {
 };
 
 export default FoodList;
+
 
 const styles = StyleSheet.create({
   container: {

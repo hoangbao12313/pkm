@@ -24,6 +24,13 @@ import BottomTabNavigator from '../Exercise4/BottomTabNavigator';
 import Routes from '../LAB2/components/Routes';
 import TodoScreen from '../android/Exercise5/TodoScreen';
 import Todo from '../android/Exercise5/Todo';
+import  Login from '../KTGK/screens/Login';
+import Register from '../KTGK/screens/Register';
+import FoodList from '../KTGK/screens/FoodList';
+import Cart from '../KTGK/screens/Cart';
+import Cuisine from '../KTGK/screens/Cuisine';
+import PaymentSuccess from '../KTGK/screens/PaymentSuccess';
+
 export default function DetailScreen({ route, navigation }) {
   const componentName = route?.params?.componentName;
 
@@ -53,6 +60,11 @@ export default function DetailScreen({ route, navigation }) {
     Routes: Routes,
     TodoScreen: TodoScreen,
     Todo: Todo,
+    Login: Login,
+    Register: Register,
+    FoodList: FoodList,
+    Cart: Cart,
+    Cuisine: Cuisine,
   };
 
   const SelectedComponent = componentsMap[componentName];

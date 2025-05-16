@@ -1,69 +1,56 @@
-import { createContext, useContext, useMemo, useReducer } from "react";
-import auth from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore"; // Nhớ import firestore
-import { Alert } from "react-native";
+import { createContext, useContext, useReducer } from "react";
+import { auth, firestore } from "../firebaseConfig";
 
-const MyContext = createContext();
-MyContext.displayName = "MyContext";
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "USER_LOGIN":
-      return { ...state, userLogin: action.value };
-    case "LOGOUT":
-      return { ...state, userLogin: null };
-    default:
-      throw new Error("Action not found");
-  }
+// --- Initial state
+const initialState = {
+  userLogin: null,
 };
 
-const MyContextControllerProvider = ({ children }) => {
-  const initialState = {
-    userLogin: null,
-    services: [],
-  };
-  
+// --- Reducer
+function reducer(state, action) {
+  switch (action.type) {
+    case "SET_USER_LOGIN":
+      return { ...state, userLogin: action.value };
+    default:
+      return state;
+  }
+}
+
+// --- Context
+const MyContext = createContext();
+
+// --- Provider
+function MyContextControllerProvider({ children }) {
   const [controller, dispatch] = useReducer(reducer, initialState);
-  const value = useMemo(() => [controller, dispatch], [controller, dispatch]);
 
   return (
-    <MyContext.Provider value={value}>
+    <MyContext.Provider value={[controller, dispatch]}>
       {children}
     </MyContext.Provider>
   );
-};
+}
 
-// Định nghĩa useMyContextController
-const useMyContextController = () => {
-  const context = useContext(MyContext);
-  
-  if (context == null) {
-    throw new Error("useMyContextController must be used within MyContextControllerProvider");
+// --- Custom hook
+const useMyContextController = () => useContext(MyContext);
+
+// --- Login logic (dành cho native SDK)
+const encodeEmail = (email) => email.replace(/\./g, "_").replace(/@/g, "_");
+
+const login = async (dispatch, email, password) => {
+  try {
+    const userCredential = await auth().signInWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+
+    const userDoc = await firestore().collection("USERS").doc(encodeEmail(email)).get();
+
+    if (userDoc.exists) {
+      dispatch({ type: "SET_USER_LOGIN", value: userDoc.data() });
+    } else {
+      alert("Không tìm thấy thông tin người dùng.");
+    }
+  } catch (error) {
+    alert("Đăng nhập thất bại: " + error.message);
   }
-
-  return context;
 };
 
-// Định nghĩa các action
-const USERS = firestore().collection("USERS");
-
-const login = (dispatch, email, password) => {
-  auth().signInWithEmailAndPassword(email, password)
-    .then((response) => {
-      USERS.doc(email)
-        .onSnapshot(u => dispatch({ type: "USER_LOGIN", value: u.data() }));
-    })
-    .catch(e => Alert.alert("Sai email hoặc mật khẩu"));
-};
-
-const logout = (dispatch) => {
-  auth().signOut()
-    .then(() => dispatch({ type: "LOGOUT" }));
-};
-
-export {
-  MyContextControllerProvider,
-  useMyContextController,
-  login,
-  logout,
-};
+export { MyContextControllerProvider, useMyContextController, login };

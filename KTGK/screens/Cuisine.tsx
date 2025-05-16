@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, StyleSheet, Image, TouchableOpacity, ImageSourcePropType, Alert } from 'react-native'; // import Alert
+import { View, FlatList, StyleSheet, Image, TouchableOpacity, ImageSourcePropType, Alert } from 'react-native';
 import { Text, Card, Appbar } from 'react-native-paper';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../type/type';
@@ -30,8 +30,7 @@ const categories: Dish[] = [
 ];
 
 const Cuisine = ({ navigation }: CuisineProps) => {
-  const [cart, setCart] = useState<Dish[]>([]);
-  const [context] = useMyContextProvider() as [AppContext, React.Dispatch<any>];
+  const [context, dispatch] = useMyContextProvider() as [AppContext, React.Dispatch<any>];
   const { userLogin } = context || {};
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!userLogin);
 
@@ -44,16 +43,13 @@ const Cuisine = ({ navigation }: CuisineProps) => {
   };
 
   const handleLogout = () => {
-    const [, dispatch] = useMyContextProvider();
     dispatch({ type: 'LOGOUT' });
     setIsLoggedIn(false);
-    Alert.alert('Thông báo', 'Đã đăng xuất!'); // dùng Alert
+    Alert.alert('Thông báo', 'Đã đăng xuất!');
   };
 
-  
-
   const goToFoodList = (category: string) => {
-    navigation.navigate('FoodList', { category }); // chắc chắn FoodList được khai báo param trong RootStackParamList
+    navigation.navigate('FoodList', { category });
   };
 
   const renderCategoryItem = ({ item }: { item: Dish }) => (

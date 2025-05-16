@@ -1,7 +1,4 @@
-import { doc, setDoc, Timestamp } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
 import React, { useState } from 'react';
-
 import {
   View,
   Text,
@@ -13,16 +10,18 @@ import {
 import { TextInput } from 'react-native-paper';
 import { RootStackParamList } from '../type/type';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebaseConfig';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 type RegisterProps = NativeStackScreenProps<RootStackParamList, 'Register'>;
 
 const Register = ({ navigation }: RegisterProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -41,21 +40,34 @@ const Register = ({ navigation }: RegisterProps) => {
     }
 
     if (!password) {
-      setPasswordError('Bạn chưa nhập password');
+      setPasswordError('Bạn chưa nhập mật khẩu');
+      valid = false;
+    } else if (password.length < 6) {
+      setPasswordError('Mật khẩu phải từ 6 ký tự trở lên');
       valid = false;
     } else {
       setPasswordError('');
     }
 
+    if (!confirmPassword) {
+      setConfirmPasswordError('Bạn chưa xác nhận mật khẩu');
+      valid = false;
+    } else if (confirmPassword !== password) {
+      setConfirmPasswordError('Mật khẩu xác nhận không khớp');
+      valid = false;
+    } else {
+      setConfirmPasswordError('');
+    }
+
     if (valid) {
       setLoading(true);
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await auth().createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
 
-        await setDoc(doc(db, 'User', user.uid), {
+        await firestore().collection('KTGK_USER').doc(user.uid).set({
           email: user.email,
-          createdAt: Timestamp.now(),
+          createdAt: firestore.FieldValue.serverTimestamp(),
           role: 'customer',
         });
 
@@ -72,6 +84,7 @@ const Register = ({ navigation }: RegisterProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
+
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -84,6 +97,7 @@ const Register = ({ navigation }: RegisterProps) => {
         error={!!emailError}
       />
       {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -103,9 +117,22 @@ const Register = ({ navigation }: RegisterProps) => {
       />
       {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
 
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        placeholderTextColor="#ccc"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry={!showPassword}
+        left={<TextInput.Icon icon="key" />}
+        autoCapitalize="none"
+        error={!!confirmPasswordError}
+      />
+      {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
+
       <TouchableOpacity
         style={styles.forgotBtn}
-        onPress={() => navigation.navigate('ForgetPassword')}
+        onPress={() => navigation.navigate('ForgotPassword')}
         disabled={loading}
       >
         <Text style={styles.forgotBtnText}>Forgot Password?</Text>
@@ -135,9 +162,6 @@ const Register = ({ navigation }: RegisterProps) => {
 };
 
 export default Register;
-
-// styles bạn giữ nguyên như cũ
-
 
 const styles = StyleSheet.create({
   container: {

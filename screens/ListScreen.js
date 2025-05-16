@@ -23,6 +23,7 @@ const thucHanhComponents = [
   { name: 'Project7', componentName: 'Project7' },
   { name: 'Project8', componentName: 'Project8' },
   { name: 'LAB1_2', componentName: 'LAB1_2' },
+  {name: 'Login', componentName: 'Login'},
   {name: 'Routes', componentName: 'Routes'},
 ];
 

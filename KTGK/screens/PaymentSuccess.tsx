@@ -9,7 +9,7 @@ const PaymentSuccess = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
 const handleBackHome = () => {
-  navigation.navigate({ name: 'Cuisine', params: undefined });
+  navigation.navigate({ name: 'Cuisine', params: { category: 'Chinese' } });
 };
 
   return (
